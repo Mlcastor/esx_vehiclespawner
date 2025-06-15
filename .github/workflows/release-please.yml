@@ -1,0 +1,24 @@
+name: Release Please
+
+# Minimum permissions needed by release-please when using the default
+# ${{ secrets.GITHUB_TOKEN }}. Without these, API writes such as branch
+# creation will fail with "Resource not accessible by integration" (403).
+permissions:
+  contents: write      # push new branch + tags
+  pull-requests: write # open/update release PR
+  issues: write        # create release labels (autorelease: pending/tagged)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Release with release-please
+        uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+# action auto-detects release-please-config.json and manifest files at repo root 
